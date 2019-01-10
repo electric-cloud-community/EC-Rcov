@@ -1,0 +1,494 @@
+# -*-Perl-*-
+
+# rcovSystemTests.ntest -
+#
+# ECRcov
+#
+# Copyright (c) 2005-2010 Electric Cloud, Inc.
+# All rights reserved
+
+use strict;
+use warnings;
+use ECTest;
+use ECSelenium;
+
+ 
+# system tests
+
+
+require "$::gTestFileDir/rcov-common.ntest";
+
+$::gProjectImported = 0;
+$::gtestProjectName = 'RcovTestProject';
+
+my $outcome = '';
+
+########################################################################
+# importProject - imports the test project and asserts that the specified
+#                 procedures exists
+#
+# Arguments:
+#   -none
+#
+# Returns:
+#   -nothing
+#
+########################################################################
+sub importProject() {
+ 
+    #assert project exists and is imported
+    assertOK($::N->import(
+             { file =>"$::gTestFileDir/rcovSystemTests.xml",
+               path  => "/projects/RcovTestProject",
+               force => 1
+             } ), 'test project could not be imported');
+   
+    #assert all given procedures exist   
+    assertOK($::N->getProcedure($::gtestProjectName, 'executeRcovWithCompareChecked'),
+     'executeRcovWithCompareChecked procedure doesn\'t exist');
+    
+    assertOK($::N->getProcedure($::gtestProjectName, 'executeRcovWithDestinationDirectory'),
+     'executeRcovWithDestinationDirectory procedure doesn\'t exist');
+    
+    assertOK($::N->getProcedure($::gtestProjectName, 'executeRcovWithNormalOptions'),
+    'executeRcovWithNormalOptions procedure doesn\'t exist'); 
+
+    assertOK($::N->getProcedure($::gtestProjectName, 'executeRcovWithoutCompareChecked'),
+    'executeRcovWithoutCompareChecked procedure doesn\'t exist'); 
+    
+    assertOK($::N->getProcedure($::gtestProjectName, 'executeRcovWithRSpecTrace'),
+    'executeRcovWithRSpecTrace procedure doesn\'t exist');            
+    
+    assertOK($::N->getProcedure($::gtestProjectName, 'executeRcovWithTargetsOnly'),
+    'executeRcovWithTargetsOnly procedure doesn\'t exist');
+    
+    assertOK($::N->getProcedure($::gtestProjectName, 'executeRcovWithTestCaseTrace'),
+    'executeRcovWithTestCaseTrace procedure doesn\'t exist');    
+    
+    $::gProjectImported = 1;
+    
+}
+
+########################################################################
+# doSetup - invokes the project import method in case it hasn't been 
+#           executed
+#
+# Arguments:
+#   -none
+#
+# Returns:
+#   -nothing
+#
+########################################################################
+sub doSetup() {
+
+    if(! $::gProjectImported) {
+        importProject();
+    }
+    
+    
+}
+
+ntest "executeRcovWithCompareChecked", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "executeRcovWithCompareChecked",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdir']/value");
+
+      assertEq($commandLine, 'rcov --output "destinationunknown" --text-coverage-diff mycoveragefile.info --threshold 34 lib/*.rb', 
+           'command line doesn\'t match expected output');
+           
+      assertEq($workingDir, '', 
+           'working directory doesn\'t match expected output');
+
+  };
+  
+ntest "executeRcovWithDestinationDirectory", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "executeRcovWithDestinationDirectory",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdir']/value");
+
+      assertEq($commandLine, 'rcov --output "destination" test/*.rb', 
+           'command line doesn\'t match expected output');
+
+  };
+  
+  ntest "executeRcovWithNormalOptions", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "executeRcovWithNormalOptions",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+      
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);      
+
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdir']/value");
+
+      assertEq($commandLine, 'rcov --no-color --annotate --text-report --text-summary --text-coverage --text-counts --save coverage.info --threshold 100 --profile test/*.rb -v', 
+           'command line doesn\'t match expected output');
+           
+      assertEq($workingDir, '', 
+           'working directory doesn\'t match expected output');
+
+  };
+  
+  ntest "executeRcovWithoutCompareChecked", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "executeRcovWithoutCompareChecked",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdir']/value");
+
+      assertEq($commandLine, 'rcov --output "destinationunknown" --threshold 34 lib/*.rb', 
+           'command line doesn\'t match expected output');
+
+  };
+  
+  ntest "executeRcovWithRSpecTrace", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "executeRcovWithRSpecTrace",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdir']/value");
+
+      assertEq($commandLine, 'rcov test/*.rb', 
+           'command line doesn\'t match expected output');
+           
+      assertEq($workingDir, '', 
+           'working directory doesn\'t match expected output');
+
+  };
+  
+      ntest "executeRcovWithTargetsOnly", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "executeRcovWithTargetsOnly",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdir']/value");
+
+      assertEq($commandLine, 'rcov test/*.rb', 
+           'command line doesn\'t match expected output');
+           
+      assertEq($workingDir, '', 
+           'working directory doesn\'t match expected output');
+
+  };
+  
+  ntest "executeRcovWithTestCaseTrace", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "executeRcovWithTestCaseTrace",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdir']/value");
+
+      assertEq($commandLine, 'rcov test/*.rb', 
+           'command line doesn\'t match expected output');
+           
+      assertEq($workingDir, '', 
+           'working directory doesn\'t match expected output');
+
+  };
+  
+  ntest "testSpecialCharacters", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "testSpecialCharacters",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdir']/value");
+
+      assertEq($commandLine, 'rcov ( ) { } [ ] ! @ # $ % ^ & * \ / | ? < > ~ ` : ; " \' ( ) { } [ ] ! @ # $ % ^ & * \ / | ? < > ~ ` : ; " \' ( ) { } [ ] ! @ # $ % ^ & * \ / | ? < > ~ ` : ; " \'', 
+           'command line doesn\'t match expected output');
+           
+      assertEq($workingDir, '', 
+           'working directory doesn\'t match expected output');
+
+  };  
+  
+  

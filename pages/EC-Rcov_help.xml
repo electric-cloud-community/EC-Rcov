@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="generator"
+          content="HTML Tidy for Windows (vers 14 February 2006), see www.w3.org" />
+    <meta content="text/html; charset=us-ascii"
+          http-equiv="content-type" />
+
+    <title>ElectricFlow Plugin for Rcov</title>
+    <link rel="stylesheet" href= "../../plugins/@PLUGIN_KEY@/pluginhelp.css" type="text/css" media= "screen" />
+</head>
+
+<body>
+    <div class="help">
+    <h1>Rcov</h1>
+    <p>Plugin Version @PLUGIN_VERSION@</p>
+    <hr style="margin-left: -10px; margin-top: 10px; height: 1px; width: 100%; color: #5981BD;" noshade="noshade" />
+
+    <p>July 1, 2015</p>
+	
+	<p>Rcov is a code coverage tool for Ruby, which can be used to
+    view your target code's overall test coverage. Rcov provides
+    many analysis modes and is able to detect uncovered code
+    introduced since the last time it was run. You can automate it
+    using Rake or Rant and export results.</p>
+
+    <h2>Rcov Links</h2>
+
+    <p>More information can be found at
+    <a href="http://rubygems.org/gems/rcov">this website</a>.</p>
+
+    <h2>ElectricFlow Integration to Rcov</h2>
+
+    <p>The plugin calls the Ruby gem's <b>Rcov</b> and passes the
+    user-provided parameters to measure the code coverage in your
+    ruby projects.<br />
+     With this plugin you can automate the code coverage measure by
+    creating an ElectricFlow procedure.<br />
+     Moreover, you can detect errors easily with our postp
+    feature.</p>
+
+    <h2>Integrated Version</h2>
+
+    <p>This plugin was developed and tested against version
+    0.9.11.</p>
+
+    <h1>Plugin Procedures</h1>
+
+    <p>
+        IMPORTANT: For all parameter descriptions below, required
+        parameters are shown in <span class='required'>bold
+        italics</span>.
+    </p>
+
+    <div class="procedure"
+         id="runRcov">
+        <a name='runRcov'
+             id="runRcov"></a> 
+
+        <h3>runRcov</h3>
+
+        <p>The runRcov procedure creates and executes a command
+        line from the parameters you provide in the procedure
+        form.</p>
+
+        <table class="grid">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+
+                    <th>Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Destination Directory</td>
+
+                    <td>Path where the coverage report will be
+                    stored. (This is the command-line '--output'
+                    option).</td>
+                </tr>
+
+                <tr>
+                    <td>Annotate</td>
+
+                    <td>Generates Annotated Source Code. (This is
+                    the command-line '--annotate' option).</td>
+                </tr>
+
+                <tr>
+                    <td>Dump Detailed Report</td>
+
+                    <td>Generates detailed report info to stdout.
+                    (This is the command-line '--text-report'
+                    option).</td>
+                </tr>
+
+                <tr>
+                    <td>Dump Summary</td>
+
+                    <td>Generates plain text summary to stdout.
+                    (This is the command-line '--text-summary'
+                    option).</td>
+                </tr>
+
+                <tr>
+                    <td>Dump Coverage Report</td>
+
+                    <td>Generates coverage report info to stdout.
+                    (This is the command-line '--text-coverage'
+                    option).</td>
+                </tr>
+
+                <tr>
+                    <td>Dump Execution Count Report</td>
+
+                    <td>Generates the execution count report info
+                    to stdout. (This is the command-line
+                    '--text-counts' option).</td>
+                </tr>
+
+                <tr>
+                    <td>Minimum Threshold</td>
+
+                    <td>Minimum allowed percentage of coverage
+                    allowed in the analysis. (This is the
+                    command-line '--threshold' option).</td>
+                </tr>
+
+                <tr>
+                    <td>Compare Code Coverage Analysis</td>
+
+                    <td>Compare code coverage to another specified
+                    file, default compares to coverage.info.</td>
+                </tr>
+
+                <tr>
+                    <td>Code Coverage File to Compare</td>
+
+                    <td>File which will be compared differentially
+                    with the target analysis. (This is the
+                    command-line '--text-coverage-diff'
+                    option).</td>
+                </tr>
+
+                <tr>
+                    <td>Colorblind safe-mode</td>
+
+                    <td>Enables colorblind safe output. (This is
+                    the command-line '--no-color' option).</td>
+                </tr>
+
+                <tr>
+                    <td class='required'>Target(s)</td>
+
+                    <td>Files to be included in the coverage
+                    analysis.<br />
+                     Every paths must be quoted.<br />
+                     When providing multiple targets, separate each
+                    target with a space.<br />
+                     You can add wild cards to any path using *.
+                    (Required)</td>
+                </tr>
+
+                <tr>
+                    <td>Save Results</td>
+
+                    <td>Saves coverage data to a file. (This is the
+                    command-line '--save' option).</td>
+                </tr>
+
+                <tr>
+                    <td>Additional Commands for rcov</td>
+
+                    <td>Additional commands to be entered for
+                    rcov.</td>
+                </tr>
+
+                <tr>
+                    <td>Additional Target Commands</td>
+
+                    <td>Additional commands to be entered for the
+                    target</td>
+                </tr>
+
+                <tr>
+                    <td>Working directory</td>
+
+                    <td>Indicate the desired working directory.
+                    Leave blank to use the default workspace.</td>
+                </tr>
+            </tbody>
+        </table><img src="../../plugins/@PLUGIN_KEY@/images/Rcov-1.png"
+             alt="Form" />
+    </div>
+
+    <h1>Examples and Use Cases</h1>
+
+    <p>In this example I will show you how to measure the code
+    coverage of your ruby sources.</p>
+
+    <ol>
+        <li>First of all we need to make sure that Rcov properly
+        installed by typing <b>gem list</b> in a console</li>
+
+        <li>In case you don't find the Rcov gem you can install it
+        by typing: <b>gem install rcov</b></li>
+
+        <li>Now we are going to create two simple ruby files:
+        example.rb and example2.rb under the <b>C:</b> drive</li>
+
+        <li>example.rb:<br />
+         <img src="../../plugins/@PLUGIN_KEY@/images/example.png"
+             alt="example" /></li>
+
+        <li>example2.rb:<br />
+         <img src="../../plugins/@PLUGIN_KEY@/images/example2.png"
+             alt="example2" /></li>
+
+        <li>Then we are going to create a procedure step and fill
+        the parameter form:<br />
+         <img src="../../plugins/@PLUGIN_KEY@/images/Rcov-1.png"
+             alt="Form" /></li>
+
+        <li>Finally run the procedure and see the results.</li>
+
+        <li>Html main report:<br />
+         <img src="../../plugins/@PLUGIN_KEY@/images/Rcov-2.png"
+             alt="main" /></li>
+
+        <li>Code coverage for the first file:<br />
+         <img src="../../plugins/@PLUGIN_KEY@/images/Rcov-3.png"
+             alt="example" /></li>
+
+        <li>Code coverage for the second file:<br />
+         <img src="../../plugins/@PLUGIN_KEY@/images/Rcov-4.png"
+             alt="example2" /></li>
+    </ol>
+
+    <h1>Release Notes</h1>
+	
+	
+    <h2>@PLUGIN_KEY@ 2.0.4</h2>
+		<ul>
+			<li>Renamed ElectricCommander to ElectricFlow.</li>
+		</ul> 
+
+    <h2>@PLUGIN_KEY@-2.0.2</h2>
+
+    <ul>
+        <li>Procedure names were changed in the step picker section</li>
+    </ul>
+    
+    <h2>@PLUGIN_KEY@-2.0.1</h2>
+
+    <ul>
+        <li>XML Parameter panels</li>
+
+        <li>Code improvements</li>
+
+        <li>Help page was changed</li>
+    </ul>
+
+    <h2>EC-Rcov 1.0.2</h2>
+
+    <ul>
+        <li>Local resource issue corrected</li>
+
+        <li>Postp support</li>
+
+        <li>Help page updated</li>
+    </ul>
+
+    <h2>EC-Rcov 1.0.1</h2>
+
+    <ul>
+        <li>Removed trace parameter due to deprecation</li>
+
+        <li>Code improvements</li>
+    </ul>
+    </div>
+</body>
+</html>

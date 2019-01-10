@@ -1,0 +1,125 @@
+<editor>
+    <help>/commander/pages/@PLUGIN_NAME@/@PLUGIN_KEY@_help?s=Administration&amp;ss=Plugins#runRcov</help>
+    <formElement>
+        <type>entry</type>
+        <label>Destination Directory:</label>
+        <property>outputpath</property>
+        <required>0</required>
+        <documentation>Path where the coverage report will be stored.</documentation>
+    </formElement>
+    <formElement>
+        <type>checkbox</type>
+        <label>Annotate:</label>
+        <property>annotate</property>
+        <checkedValue>1</checkedValue>
+        <uncheckedValue>0</uncheckedValue>
+        <required>0</required>
+        <documentation>Generates Annotated Source Code.</documentation>
+    </formElement>
+    <formElement>
+        <type>checkbox</type>
+        <label>Dump Detailed Report:</label>
+        <property>detailedreport</property>
+        <checkedValue>1</checkedValue>
+        <uncheckedValue>0</uncheckedValue>
+        <required>0</required>
+        <documentation>Generates detailed report info to stdout.</documentation>
+    </formElement>
+    <formElement>
+        <type>checkbox</type>
+        <label>Dump Summary:</label>
+        <property>summaryreport</property>
+        <checkedValue>1</checkedValue>
+        <uncheckedValue>0</uncheckedValue>
+        <required>0</required>
+        <documentation>Generates plain text summary to stdout.</documentation>
+    </formElement>
+    <formElement>
+        <type>checkbox</type>
+        <label>Dump Coverage Report:</label>
+        <property>coveragereport</property>
+        <checkedValue>1</checkedValue>
+        <uncheckedValue>0</uncheckedValue>
+        <required>0</required>
+        <documentation>Generates coverage report info to stdout.</documentation>
+    </formElement>
+    <formElement>
+        <type>checkbox</type>
+        <label>Dump Execution Count Report:</label>
+        <property>countreport</property>
+        <checkedValue>1</checkedValue>
+        <uncheckedValue>0</uncheckedValue>
+        <required>0</required>
+        <documentation>Generates the execution count report info to stdout.</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Minimum Threshold:</label>
+        <property>minimumthreshold</property>
+        <required>0</required>
+        <documentation>Minimum allowed percentage of coverage allowed in the analysis.</documentation>
+    </formElement>
+    <formElement>
+        <type>checkbox</type>
+        <label>Compare Code Coverage Analysis:</label>
+        <property>compare</property>
+        <checkedValue>1</checkedValue>
+        <uncheckedValue>0</uncheckedValue>
+        <required>0</required>
+        <documentation>Compare code coverage to another specified file, default compares to coverage.info.</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Code Coverage File to Compare:</label>
+        <property>coveragefiletocompare</property>
+        <required>0</required>
+        <documentation>File which will be compared differentially with the target analysis.</documentation>
+    </formElement>
+    <formElement>
+        <type>checkbox</type>
+        <label>Colorblind safe-mode:</label>
+        <property>colorblindsafe</property>
+        <checkedValue>1</checkedValue>
+        <uncheckedValue>0</uncheckedValue>
+        <required>0</required>
+        <documentation>Enables colorblind safe output.</documentation>
+    </formElement>
+    <formElement>
+        <type>textarea</type>
+        <label>Target(s):</label>
+        <property>targets</property>
+        <required>1</required>
+        <documentation>Files to be included in the coverage analysis. Every paths must be quoted. When providing multiple targets, separate each target with a space. You can add wildcards to any path using *.</documentation>
+    </formElement>
+    <formElement>
+        <type>checkbox</type>
+        <label>Save Results:</label>
+        <property>save</property>
+        <checkedValue>1</checkedValue>
+        <uncheckedValue>0</uncheckedValue>
+        <required>0</required>
+        <documentation>Saves coverage data to a file.</documentation>
+    </formElement>
+    <formElement>
+        <type>textarea</type>
+        <label>Additional Commands for rcov:</label>
+        <property>additionalrcovcommands</property>
+        <required>0</required>
+        <documentation>Additional commands to be entered for rcov.</documentation>
+    </formElement>
+    <formElement>
+        <type>textarea</type>
+        <label>Additional Target Commands:</label>
+        <property>additionaltargetcommands</property>
+        <required>0</required>
+        <documentation>Additional commands to be entered for the target</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Working directory:</label>
+        <property>workingdir</property>
+        <required>0</required>
+        <value></value>
+        <documentation>Working directory</documentation>
+    </formElement>
+</editor>
